@@ -125,9 +125,9 @@ var fieldTemplate = map[int]string{
 {{end}}    {{.Mutator}} = {{.Reset}}`,
 	poolInstanceRelease: `	{{.PoolName}}.Put({{.Accessor}})`,
 
-	poolSliceInstanceRelease: `	for i := range {{.Accessor}} {
-        {{.Accessor}}[i].Reset()
-		{{.PoolName}}.Put({{.PointerModifier}}{{.Accessor}}[i])
+	poolSliceInstanceRelease: `	for idx := range {{.Accessor}} {
+        {{.Accessor}}[idx].Reset()
+		{{.PoolName}}.Put({{.PointerModifier}}{{.Accessor}}[idx])
     }`,
 }
 
@@ -171,9 +171,9 @@ func ({{.Receiver}}) IsNil() bool {
 }
 
 // UnmarshalJSONObject implements gojay's UnmarshalerJSONObject
-func ({{.Receiver}}) UnmarshalJSONObject(dec *gojay.Decoder, k string) error {
+func ({{.Receiver}}) UnmarshalJSONObject(dec *gojay.Decoder, key string) error {
 {{.InitEmbedded}}
-	switch k {
+	switch key {
 {{.DecodingCases}}	
 	}
 	return nil
@@ -289,7 +289,7 @@ func ({{.Receiver}}) Reset()  {
 	poolVar: `var {{.PoolName}} *sync.Pool`,
 	poolInit: `	{{.PoolName}} = &sync.Pool {
 		New: func()interface{} {
-			return &{{.Type}}{}
+			return new({{.Type}})
 		},
 	}`,
 	embeddedStructInit: `if {{.Accessor}} == nil { 

@@ -2,8 +2,10 @@ package main
 
 import (
 	"flag"
-	"github.com/francoispqt/gojay/gojay/codegen"
 	"log"
+	"os"
+
+	"github.com/francoispqt/gojay/gojay/codegen"
 )
 
 var pkg = flag.String("pkg", "", "the package name of the generated file")
@@ -20,4 +22,5 @@ func main() {
 	if err := gen.Generate(); err != nil {
 		log.Fatal(err)
 	}
+	log.Println(os.Args)
 }

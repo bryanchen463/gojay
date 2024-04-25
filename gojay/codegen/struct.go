@@ -16,7 +16,7 @@ type Struct struct {
 	Body  string
 }
 
-//Generate generates decoderCode + structRelease + encoderCode
+// Generate generates decoderCode + structRelease + encoderCode
 func (s *Struct) Generate() (string, error) {
 	return s.generateEncoding(s.TypeInfo)
 }
@@ -54,6 +54,9 @@ func (s *Struct) generateEncoding(structInfo *toolbox.TypeInfo) (string, error) 
 		InitEmbedded:  initEmbedded,
 		Reset:         resetCode,
 		Alias:         s.Alias,
+	}
+	if structInfo.IsSlice {
+		return expandBlockTemplate(structTypeSlice, data)
 	}
 	return expandBlockTemplate(encodingStructType, data)
 }
